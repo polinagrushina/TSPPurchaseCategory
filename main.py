@@ -20,19 +20,19 @@ def get_purchase_code():
             biomed_equip = st.radio("Is this for biomed equipment?", ["Yes", "No"])
 
             if biomed_equip == "Yes":
-                biomed_type = st.selectbox("Type of biomed equipment:", ["Less", "More", "Furniture"])
-                return {"Less": "65002", "More": "65007", "Furniture": "65051"}[biomed_type]
+                biomed_type = st.selectbox("Type of biomed equipment:", ["<$5000", ">$5000", "Furniture<$5000"])
+                return {"<$5000": "65002", ">$5000": "65007", "Furniture<$5000": "65051"}[biomed_type]
 
             else:
                 misc_equip = st.radio("Is this for certifications, awards, or subscriptions?", ["Yes", "No"])
 
                 if misc_equip == "Yes":
-                    misc_type = st.selectbox("Select the type:", ["Certification", "Award", "Membership", "Magazine"])
+                    misc_type = st.selectbox("Select the type:", ["Certification", "Award", "Membership sub", "Magazine sub"])
                     return {
                         "Certification": "64039",
                         "Award": "84000",
-                        "Membership": "60561",
-                        "Magazine": "60163"
+                        "Membership sub": "60561",
+                        "Magazine sub": "60163"
                     }[misc_type]
 
                 else:
