@@ -1,96 +1,60 @@
-def get_purchase_code():
-    print("Is this for a part? (yes/no)")
-    part = input().strip().lower()
-    
-    if part == "yes":
-        print("Is this non-billable, billable, or contracted?")
-        part_type = input().strip().lower()
+import streamlit as st
 
-        if part_type == "non-billable":
-            return "60082A"
-        elif part_type == "billable":
-            return "60081"
-        elif part_type == "contracted":
-            return "60082B"
-        else:
-            return "Error: Invalid part type. Please rerun and enter answers correctlyno."
+def get_purchase_code():
+    st.title("Purchase Category Code Helper")
+
+    part = st.radio("Is this for a part?", ["Yes", "No"])
+
+    if part == "Yes":
+        part_type = st.selectbox("Select the type:", ["Non-billable", "Billable", "Contracted"])
+        return {"Non-billable": "60082A", "Billable": "60081", "Contracted": "60082B"}[part_type]
 
     else:
-        print("Is this for a vendor repair? (yes/no)")
-        vendor_supply = input().strip().lower()
+        vendor_supply = st.radio("Is this for a vendor repair?", ["Yes", "No"])
 
-        if vendor_supply == "yes":
-            print("Is this billable or non-billable?")
-            vendor_type = input().strip().lower()
-
-            if vendor_type == "billable":
-                return "63122"
-            elif vendor_type == "non-billable":
-                return "63123"
-            else:
-                return "Error: Invalid vendor type. Please rerun and enter answers correctly."
+        if vendor_supply == "Yes":
+            vendor_type = st.selectbox("Is this billable or non-billable?", ["Billable", "Non-billable"])
+            return {"Billable": "63122", "Non-billable": "63123"}[vendor_type]
 
         else:
-            print("Is this for biomed equipment? (yes/no)")
-            biomed_equip = input().strip().lower()
+            biomed_equip = st.radio("Is this for biomed equipment?", ["Yes", "No"])
 
-            if biomed_equip == "yes":
-                print("Is it less than or equal to, more than, or furniture less than $5000? (less, more, furniture)")
-                biomed_type = input().strip().lower()
-
-                if biomed_type == "less":
-                    return "65002"
-                elif biomed_type == "more":
-                    return "65007"
-                elif biomed_type == "furniture":
-                    return "65051"
-                else:
-                    return "Error: Invalid biomed type. Please rerun and enter answers correctly."
+            if biomed_equip == "Yes":
+                biomed_type = st.selectbox("Type of biomed equipment:", ["Less", "More", "Furniture"])
+                return {"Less": "65002", "More": "65007", "Furniture": "65051"}[biomed_type]
 
             else:
-                print("Is this for certifications, awards, or subscriptions? (yes/no)")
-                misc_equip = input().strip().lower()
+                misc_equip = st.radio("Is this for certifications, awards, or subscriptions?", ["Yes", "No"])
 
-                if misc_equip == "yes":
-                    print("Is it a certification, sponsored award, subscription for membership, or subscription for magazine? (certif, award, membership, magazine)")
-                    misc_type = input().strip().lower()
-
-                    if misc_type == "certif":
-                        return "64039"
-                    elif misc_type == "award":
-                        return "84000"
-                    elif misc_type == "membership":
-                        return "60561"
-                    elif misc_type == "magazine":
-                        return "60163"
-                    else:
-                        return "Error: Invalid certification/subscription type. Please rerun and enter answers correctly."
+                if misc_equip == "Yes":
+                    misc_type = st.selectbox("Select the type:", ["Certification", "Award", "Membership", "Magazine"])
+                    return {
+                        "Certification": "64039",
+                        "Award": "84000",
+                        "Membership": "60561",
+                        "Magazine": "60163"
+                    }[misc_type]
 
                 else:
-                    print("Is this for general supplies? (yes/no)")
-                    gen_equip = input().strip().lower()
+                    gen_equip = st.radio("Is this for general supplies?", ["Yes", "No"])
 
-                    if gen_equip == "yes":
-                        print("Is it a book, office staples, shipping, vehicle maintenance, consumables, or computing?")
-                        gen_type = input().strip().lower()
-
-                        if gen_type == "book":
-                            return "60161"
-                        elif gen_type == "office staples":
-                            return "60001"
-                        elif gen_type == "shipping":
-                            return "60123"
-                        elif gen_type == "vehicle maintenance":
-                            return "63128"
-                        elif gen_type == "consumables":
-                            return "63127"
-                        elif gen_type == "computing":
-                            return "60005"
-                        else:
-                            return "Error: Invalid general supply type. Please rerun and enter answers correctly."
+                    if gen_equip == "Yes":
+                        gen_type = st.selectbox("Select the supply type:", [
+                            "Book", "Office staples", "Shipping", "Vehicle maintenance", "Consumables", "Computing"
+                        ])
+                        return {
+                            "Book": "60161",
+                            "Office staples": "60001",
+                            "Shipping": "60123",
+                            "Vehicle maintenance": "63128",
+                            "Consumables": "63127",
+                            "Computing": "60005"
+                        }[gen_type]
                     else:
-                        return "Error: No matching category found. Please rerun and enter answers correctly."
+                        st.error("No matching category found.")
+                        return None
 
-# Run the decision tree
+# Main logic
 code = get_purchase_code()
-print(f"Purchase Code: {code}")
+if code:
+    st.success(f"Suggested Purchase Code: **{code}**")
